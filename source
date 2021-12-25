@@ -6349,7 +6349,7 @@ game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
 		if KeepInfYield == true then
 			local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 			if queueteleport then
-				queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
+				queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/SlipperySlope175/Infinite-Yield-Backup/master/source'))()")
 			end
 		end
 	end
@@ -12035,7 +12035,7 @@ end
 IYMouse.Move:Connect(checkTT)
 
 task.spawn(function()
-	if pcall(function() loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/version'))() end) then
+	if pcall(function() loadstring(game:HttpGet('https://raw.githubusercontent.com/SlipperySlope175/Infinite-Yield-Backup/master/source'))() end) then
 		if ver ~= Version then
 			notify('Outdated','Get the new version at infinite.yiff.gg')
 		end
