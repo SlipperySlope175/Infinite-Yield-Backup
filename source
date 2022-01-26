@@ -12,7 +12,7 @@ if not game:IsLoaded() then
 	notLoaded:Destroy()
 end
 
-ver = '5.4.2'
+ver = '5.5'
 
 Players = game:GetService("Players")
 
@@ -599,7 +599,7 @@ Credits.Position = UDim2.new(0, 0, 0.9, 30)
 Credits.Size = UDim2.new(0, 250, 0, 20)
 Credits.Font = Enum.Font.SourceSansLight
 Credits.FontSize = Enum.FontSize.Size18
-Credits.Text = "Edge // Zwolf // Moon // Hunter"
+Credits.Text = "Edge // Zwolf // Moon // Toon"
 Credits.TextColor3 = Color3.new(1, 1, 1)
 Credits.ZIndex = 10
 
@@ -3952,11 +3952,24 @@ JoinLog = function(plr)
 	end
 end
 
+local CleanFileName = function(str)
+	str = tostring(str)
+	str = str:gsub("*", "")
+	str = str:gsub("\"", "")
+	str = str:gsub("\\", "")
+	str = str:gsub("?", "")
+	str = str:gsub(":", "")
+	str = str:gsub("<", "")
+	str = str:gsub(">", "")
+	str = str:gsub("|", "")
+	return str
+end
+
 SaveChatlogs.MouseButton1Down:Connect(function()
 	if writefileExploit() then
 		if #scroll_2:GetChildren() > 0 then
 			notify("Loading",'Hold on a sec')
-			local placeName = game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name
+			local placeName = CleanFileName(game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name)
 			local writelogs = '-- Infinite Yield Chat logs for "'..placeName..'"\n'
 			for _, child in pairs(scroll_2:GetChildren()) do
 				writelogs = writelogs..'\n'..child.Text
@@ -4321,7 +4334,8 @@ end
 PlayerGui = Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
 local chatbox
 task.spawn(function()
-	if pcall(function() chatbox = PlayerGui:WaitForChild("Chat").Frame.ChatBarParentFrame.Frame.BoxFrame.Frame.ChatBar end) then	
+	local success, result = pcall(function() chatbox = game.WaitForChild(PlayerGui, "Chat").Frame.ChatBarParentFrame.Frame.BoxFrame.Frame.ChatBar end)
+	if success then
 		local function chatboxFocused()
 			canvasPos = CMDsF.CanvasPosition
 		end
@@ -4477,6 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'tweenwaypoint / twp [name]', DESC = 'Tweens player to
 CMDs[#CMDs + 1] = {NAME = 'walktowaypoint / wtwp [name]', DESC = 'Walks player to a waypoint'}
 CMDs[#CMDs + 1] = {NAME = 'deletewaypoint / dwp [name]', DESC = 'Deletes a waypoint'}
 CMDs[#CMDs + 1] = {NAME = 'clearwaypoints / cwp', DESC = 'Clears all waypoints'}
+CMDs[#CMDs + 1] = {NAME = 'cleargamewaypoints / cgamewp', DESC = 'Clears all waypoints for the game you are in'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'goto [plr]', DESC = 'Go to a player'}
 CMDs[#CMDs + 1] = {NAME = 'tweengoto / tgoto [plr]', DESC = 'Tween to a player (bypasses some anti cheats)'}
@@ -4539,6 +4554,8 @@ CMDs[#CMDs + 1] = {NAME = 'freecamwaypoint / fcwp [name]', DESC = 'Moves / opens
 CMDs[#CMDs + 1] = {NAME = 'freecamgoto / fcgoto / fctp [plr]', DESC = 'Moves / opens freecam to a player'}
 CMDs[#CMDs + 1] = {NAME = 'unfreecam / unfc', DESC = 'Disables freecam'}
 CMDs[#CMDs + 1] = {NAME = 'freecamspeed / fcspeed [num]', DESC = 'Adjusts freecam speed (default is 1)'}
+CMDs[#CMDs + 1] = {NAME = 'notifyfreecamposition / notifyfcpos', DESC = 'Noitifies you your freecam coordinates'}
+CMDs[#CMDs + 1] = {NAME = 'copyfreecamposition / copyfcpos', DESC = 'Copies your freecam coordinates to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'gotocamera / gotocam', DESC = 'Teleports you to the location of your camera'}
 CMDs[#CMDs + 1] = {NAME = 'tweengotocam / tgotocam', DESC = 'Tweens you to the location of your camera'}
 CMDs[#CMDs + 1] = {NAME = 'firstp', DESC = 'Forces camera to go into first person'}
@@ -4573,6 +4590,7 @@ CMDs[#CMDs + 1] = {NAME = 'bringpartclass / bpc [class name] (CLIENT)', DESC = '
 CMDs[#CMDs + 1] = {NAME = 'noclickdetectorlimits / nocdlimits', DESC = 'Sets all click detectors MaxActivationDistance to math.huge'}
 CMDs[#CMDs + 1] = {NAME = 'fireclickdetectors / firecd', DESC = 'Uses all click detectors in a game'}
 CMDs[#CMDs + 1] = {NAME = 'firetouchinterests / touchinterests', DESC = 'Uses all touchinterests in a game'}
+CMDs[#CMDs + 1] = {NAME = 'noproximitypromptlimits / nopplimits', DESC = 'Sets all proximity prompts MaxActivationDistance to math.huge'}
 CMDs[#CMDs + 1] = {NAME = 'fireproximityprompts / firepp', DESC = 'Uses all proximity prompts in a game'}
 CMDs[#CMDs + 1] = {NAME = 'simulationradius / simradius', DESC = 'Sets your SimulationRadius to math.huge'}
 CMDs[#CMDs + 1] = {NAME = 'nosimulationradius / nosimradius', DESC = 'Turns off the SimulationRadius loop and restores values to default'}
@@ -4639,7 +4657,8 @@ CMDs[#CMDs + 1] = {NAME = 'unloopoof', DESC = 'Stops the oof chaos'}
 CMDs[#CMDs + 1] = {NAME = 'muteboombox [plr]', DESC = 'Mutes someones boombox'}
 CMDs[#CMDs + 1] = {NAME = 'unmuteboombox [plr]', DESC = 'Unmutes someones boombox'}
 CMDs[#CMDs + 1] = {NAME = 'unloopoof', DESC = 'Stops the oof chaos'}
-CMDs[#CMDs + 1] = {NAME = 'hitbox [plr] [size]', DESC = 'Expands the hitbox for players heads (default is 1)'}
+CMDs[#CMDs + 1] = {NAME = 'hitbox [plr] [size]', DESC = 'Expands the hitbox for players HumanoidRootPart (default is 1)'}
+CMDs[#CMDs + 1] = {NAME = 'headsize [plr] [size]', DESC = 'Expands the head size for players Head (default is 1)'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'reset', DESC = 'Resets your character normally'}
 CMDs[#CMDs + 1] = {NAME = 'respawn', DESC = 'Respawns you'}
@@ -4649,12 +4668,13 @@ CMDs[#CMDs + 1] = {NAME = 'invisible / invis', DESC = 'Makes you invisible to ot
 CMDs[#CMDs + 1] = {NAME = 'visible / vis', DESC = 'Makes you visible to other players'}
 CMDs[#CMDs + 1] = {NAME = 'toolinvisible / toolinvis / tinvis', DESC = 'Makes you invisible to other players and able to use tools'}
 CMDs[#CMDs + 1] = {NAME = 'speed / ws [num]', DESC = 'Change your walkspeed'}
+CMDs[#CMDs + 1] = {NAME = 'spoofspeed / spoofws [num]', DESC = 'Spoofs your WalkSpeed on the Client'}
 CMDs[#CMDs + 1] = {NAME = 'loopspeed / loopws [num]', DESC = 'Loops your walkspeed'}
 CMDs[#CMDs + 1] = {NAME = 'unloopspeed / unloopws', DESC = 'Turns off loopspeed'}
 CMDs[#CMDs + 1] = {NAME = 'hipheight / hheight [num]', DESC = 'Adjusts hip height'}
 CMDs[#CMDs + 1] = {NAME = 'jumppower / jpower / jp [num]', DESC = 'Change a players jump height'}
 CMDs[#CMDs + 1] = {NAME = 'loopjumppower / loopjp [num]', DESC = 'Loops your jump height'}
-CMDs[#CMDs + 1] = {NAME = 'unloopjumppower / unloopjp [num]', DESC = 'Turns off loopjumppower'}
+CMDs[#CMDs + 1] = {NAME = 'unloopjumppower / unloopjp', DESC = 'Turns off loopjumppower'}
 CMDs[#CMDs + 1] = {NAME = 'maxslopeangle / msa [num]', DESC = 'Adjusts MaxSlopeAngle'}
 CMDs[#CMDs + 1] = {NAME = 'gravity / grav [num] (CLIENT)', DESC = 'Change your gravity'}
 CMDs[#CMDs + 1] = {NAME = 'sit', DESC = 'Makes your character sit'}
@@ -4767,6 +4787,7 @@ CMDs[#CMDs + 1] = {NAME = 'breakloops / break (cmd loops)', DESC = 'Stops any cm
 CMDs[#CMDs + 1] = {NAME = 'removecmd / deletecmd', DESC = 'Removes a command until the admin is reloaded'}
 CMDs[#CMDs + 1] = {NAME = 'tpwalk / teleportwalk [num]', DESC = 'Teleports you to your move direction'}
 CMDs[#CMDs + 1] = {NAME = 'untpwalk / unteleportwalk', DESC = 'Undoes tpwalk / teleportwalk'}
+CMDs[#CMDs + 1] = {NAME = 'notifyping / ping', DESC = 'Notify yourself your ping'}
 wait()
 
 for i = 1, #CMDs do
@@ -6349,7 +6370,7 @@ game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
 		if KeepInfYield == true then
 			local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
 			if queueteleport then
-				queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/SlipperySlope175/Infinite-Yield-Backup/master/source'))()")
+				queueteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
 			end
 		end
 	end
@@ -6452,7 +6473,10 @@ addcmd('toggleunkeepiy', {}, function(args, speaker)
 	end
 end)
 
+local canOpenServerinfo = true
 addcmd('serverinfo',{'info','sinfo'},function(args, speaker)
+	if not canOpenServerinfo then return end
+	canOpenServerinfo = false
 	task.spawn(function()
 		local FRAME = Instance.new("Frame")
 		local shadow = Instance.new("Frame")
@@ -6720,6 +6744,7 @@ addcmd('serverinfo',{'info','sinfo'},function(args, speaker)
 			FRAME:TweenPosition(UDim2.new(0.5, -130, 0, -500), "InOut", "Quart", 0.5, true, nil) 
 			wait(0.6)
 			FRAME:Destroy()
+			canOpenServerinfo = true
 		end)
 		local Asset = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
 		SINFOGUI.name.Text = "Place Name: " .. Asset.Name
@@ -7463,6 +7488,29 @@ addcmd('clearwaypoints',{'cwp','clearpositions','cpos','clearpos'},function(args
 	notify('Modified Waypoints','Removed all waypoints')
 end)
 
+addcmd('cleargamewaypoints',{'cgamewp'},function(args, speaker)
+	for i,v in pairs(WayPoints) do
+		if v.GAME == game.PlaceId then
+			table.remove(WayPoints, i)
+		end
+	end
+	if AllWaypoints ~= nil and #AllWaypoints > 0 then
+		for i,v in pairs(AllWaypoints) do
+			if v.GAME == game.PlaceId then
+				table.remove(AllWaypoints, i)
+			end
+		end
+	end
+	for i,v in pairs(pWayPoints) do
+		if v.GAME == game.PlaceId then
+			table.remove(pWayPoints, i)
+		end
+	end
+	refreshwaypoints()
+	updatesaves()
+	notify('Modified Waypoints','Deleted game waypoints')
+end)
+
 addcmd('enable',{},function(args, speaker)
 	if args[1]:lower() == 'inventory' or args[1]:lower() == 'backpack' then
 		game:GetService("StarterGui"):SetCoreGuiEnabled('Backpack', true)
@@ -7702,6 +7750,20 @@ addcmd('antilag',{'boostfps','lowgraphics'},function(args, speaker)
 			v.Enabled = false
 		end
 	end
+	workspace.DescendantAdded:Connect(function(child)
+		coroutine.wrap(function()
+			if child:IsA('ForceField') then
+				game:GetService('RunService').Heartbeat:Wait()
+				child:Destroy()
+			elseif child:IsA('Sparkles') then
+				game:GetService('RunService').Heartbeat:Wait()
+				child:Destroy()
+			elseif child:IsA('Smoke') or child:IsA('Fire') then
+				game:GetService('RunService').Heartbeat:Wait()
+				child:Destroy()
+			end
+		end)()
+	end)
 end)
 
 addcmd('setfpscap', {'fpscap', 'maxfps'}, function(args, speaker)
@@ -8223,6 +8285,22 @@ addcmd('freecamspeed',{'fcspeed'},function(args, speaker)
 	local FCspeed = args[1] or 1
 	if isNumber(FCspeed) then
 		NAV_KEYBOARD_SPEED = Vector3.new(FCspeed, FCspeed, FCspeed)
+	end
+end)
+
+addcmd('notifyfreecamposition',{'notifyfcpos'},function(args, speaker)
+	if fcRunning then
+		local X,Y,Z = workspace.CurrentCamera.CFrame.Position.X,workspace.CurrentCamera.CFrame.Position.Y,workspace.CurrentCamera.CFrame.Position.Z
+		local Format, Round = string.format, math.round
+		notify("Current Position", Format("%s, %s, %s", Round(X), Round(Y), Round(Z)))
+	end
+end)
+
+addcmd('copyfreecamposition',{'copyfcpos'},function(args, speaker)
+	if fcRunning then
+		local X,Y,Z = workspace.CurrentCamera.CFrame.Position.X,workspace.CurrentCamera.CFrame.Position.Y,workspace.CurrentCamera.CFrame.Position.Z
+		local Format, Round = string.format, math.round
+		toClipboard(Format("%s, %s, %s", Round(X), Round(Y), Round(Z)))
 	end
 end)
 
@@ -9785,6 +9863,27 @@ addcmd('speed',{'ws','walkspeed'},function(args, speaker)
 	end
 end)
 
+addcmd('spoofspeed',{'spoofws','spoofwalkspeed'},function(args, speaker)
+	if args[1] and isNumber(args[1]) then
+		local getrawmt = (debug and debug.getmetatable) or getrawmetatable
+		local setReadOnly = setreadonly or (make_writeable and function(table, readonly) if readonly then make_readonly(table) else make_writeable(table) end end)
+		local gameMt = getrawmt(game)
+		if gameMt then
+			local OldIndex = gameMt.__index
+			setReadOnly(gameMt, false)
+			gameMt.__index = newcclosure(function(Self, Self2)
+				if Self:IsA('Humanoid') and string.lower(tostring(Self2)) == 'walkspeed' then
+					return args[1]
+				end
+				return OldIndex(Self, Self2)
+			end)
+			setReadOnly(gameMt, true)
+		else
+			notify('Incompatible Exploit','Your exploit does not support this command (missing getrawmetatable)')
+		end
+	end
+end)
+
 addcmd('loopspeed',{'loopws'},function(args, speaker)
 	local speed = args[1] or 16
 	if args[2] then
@@ -9838,8 +9937,17 @@ addcmd('loopjumppower',{'loopjp','loopjpower'},function(args, speaker)
 end)
 
 addcmd('unloopjumppower',{'unloopjp','unloopjpower'},function(args, speaker)
+	local Char = speaker.Character or workspace:FindFirstChild(speaker.Name)
+	local Human = Char and Char:FindFirstChildWhichIsA("Humanoid")
 	HumanModCons.jpLoop = (HumanModCons.jpLoop and HumanModCons.jpLoop:Disconnect() and false) or nil
 	HumanModCons.jpCA = (HumanModCons.jpCA and HumanModCons.jpCA:Disconnect() and false) or nil
+	if Char and Human then
+		if speaker.Character:FindFirstChildOfClass('Humanoid').UseJumpPower then
+			speaker.Character:FindFirstChildOfClass('Humanoid').JumpPower = 50
+		else
+			speaker.Character:FindFirstChildOfClass('Humanoid').JumpHeight  = 50
+		end
+	end
 end)
 
 addcmd('tools',{'gears'},function(args, speaker)
@@ -9951,6 +10059,17 @@ addcmd('explorer',{'dex'},function(args, speaker)
 	end
 
 	Load(Dex)
+end)
+
+addcmd('remotespy',{'rspy'},function(args, speaker)
+	notify("Loading",'Hold on a sec')
+	-- Full credit to exx, creator of SimpleSpy
+	loadstring(game:HttpGet("https://gist.githubusercontent.com/luatsuki/c75a272fb67bccc22bd1b6add92ee267/raw/56375f8536aeca0cc84b44032312efb0fa5b7fa0/Spy"))()
+end)
+
+addcmd('audiologger',{'alogger'},function(args, speaker)
+	notify("Loading",'Hold on a sec')
+	loadstring(game:HttpGet(('https://pastebin.com/raw/GmbrsEjM'),true))()
 end)
 
 local loopgoto = nil
@@ -10378,16 +10497,29 @@ addcmd('fireclickdetectors',{'firecd','firecds'},function(args, speaker)
 	end
 end)
 
+addcmd('noproximitypromptlimits',{'nopplimits','removepplimits'},function(args, speaker)
+	for i,v in pairs(workspace:GetDescendants()) do
+		if v:IsA("ProximityPrompt") then
+			v.MaxActivationDistance = math.huge
+		end
+	end
+end)
+
 addcmd('fireproximityprompts',{'firepp'},function(args, speaker)
 	if fireproximityprompt then
-		for i, v in pairs(workspace:GetDescendants()) do
-			if v:FindFirstChild("ProximityPrompt") then
-				fireproximityprompt(v.ProximityPrompt)
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v:IsA("ProximityPrompt") then
+				fireproximityprompt(v)
 			end
 		end
 	else
 		notify('Incompatible Exploit','Your exploit does not support this command (missing fireproximityprompt)')
 	end
+end)
+
+addcmd('notifyping',{'ping'},function(args, speaker)
+	local Current_Ping = string.split(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString(), " ")[1] .. "ms"
+	notify("Ping", tostring(Current_Ping))
 end)
 
 simRadius = false
@@ -11033,18 +11165,18 @@ addcmd('fling',{},function(args, speaker)
 	bv.Parent = rootpart
 	local Char = speaker.Character:GetChildren()
 	for i, v in next, Char do
-	    if v:IsA("BasePart") then
-	        v.CanCollide = false
-	        v.Massless = true
-	        v.Velocity = Vector3.new(0, 0, 0)
-	    end
+		if v:IsA("BasePart") then
+			v.CanCollide = false
+			v.Massless = true
+			v.Velocity = Vector3.new(0, 0, 0)
+		end
 	end
 	flingtbl.Noclipping2 = game:GetService("RunService").Stepped:Connect(function()
-	    for i, v in next, Char do
-	        if v:IsA("BasePart") then
-	            v.CanCollide = false
-	        end
-	    end
+		for i, v in next, Char do
+			if v:IsA("BasePart") then
+				v.CanCollide = false
+			end
+		end
 	end)
 	flinging = true
 end)
@@ -11551,10 +11683,10 @@ addcmd('unhovername',{'nohovername'},function(args, speaker)
 	end
 end)
 
-addcmd('hitbox',{},function(args, speaker)
+addcmd('headsize',{},function(args, speaker)
 	local players = getPlayer(args[1], speaker)
 	for i,v in pairs(players) do
-		if Players[v]~= speaker and Players[v].Character:FindFirstChild('Head') then
+		if Players[v] ~= speaker and Players[v].Character:FindFirstChild('Head') then
 			local sizeArg = tonumber(args[2])
 			local Size = Vector3.new(sizeArg,sizeArg,sizeArg)
 			local Head = Players[v].Character:FindFirstChild('Head')
@@ -11563,6 +11695,26 @@ addcmd('hitbox',{},function(args, speaker)
 					Head.Size = Vector3.new(2,1,1)
 				else
 					Head.Size = Size
+				end
+			end
+		end
+	end
+end)
+
+addcmd('hitbox',{},function(args, speaker)
+	local players = getPlayer(args[1], speaker)
+	for i,v in pairs(players) do
+		if Players[v] ~= speaker and Players[v].Character:FindFirstChild('HumanoidRootPart') then
+			local sizeArg = tonumber(args[2])
+			local Size = Vector3.new(sizeArg,sizeArg,sizeArg)
+			local Root = Players[v].Character:FindFirstChild('HumanoidRootPart')
+			if Root:IsA("BasePart") then
+				if not args[2] or sizeArg == 1 then
+					Root.Size = Vector3.new(2,1,1)
+					Root.Transparency = 0.4
+				else
+					Root.Size = Size
+					Root.Transparency = 0.4
 				end
 			end
 		end
@@ -12024,7 +12176,7 @@ end
 IYMouse.Move:Connect(checkTT)
 
 task.spawn(function()
-	if pcall(function() loadstring(game:HttpGet('https://raw.githubusercontent.com/SlipperySlope175/Infinite-Yield-Backup/master/source'))() end) then
+	if pcall(function() loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/version'))() end) then
 		if ver ~= Version then
 			notify('Outdated','Get the new version at infinite.yiff.gg')
 		end
